@@ -9,6 +9,7 @@
 #include "Node.h"
 
 
+
 // Accessor Functions
 string Node::returnID(void)
 {
@@ -35,6 +36,20 @@ Node * Node::returnRight_(void)
 string Node::returnLHash(void)
 {
 	return string();
+}
+
+void Node::printRecord(void)
+{
+	cout << "Left History (Earliest record to current Left Hash):" << endl;
+	for (int i = 0; i < lHist.size(); i++)
+	{
+	cout <<	lHist[i] << endl;
+	}
+	cout << "Right History (Earliest record to current Right Hash):" << endl;
+	for (int i = 0; i < rHist.size(); i++)
+	{
+		cout << rHist[i] << endl;
+	}
 }
 
 void Node::newLHash(string input)

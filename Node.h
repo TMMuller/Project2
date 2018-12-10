@@ -15,6 +15,8 @@
 using std::string;
 #include<vector>
 using std::vector;
+#include<iostream>
+using namespace std;
 
 // -----------------------------------------------------------------------------
 // Node Class:
@@ -71,6 +73,7 @@ public:
 	Node * returnLeft_(void);
 	Node * returnRight_(void);
 	string returnLHash(void);
+	void printRecord(void);
 	//Node * returnParent_(void);
 	// Replacement functions
 
