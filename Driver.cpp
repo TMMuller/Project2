@@ -10,31 +10,37 @@
 #include <iostream>
 #include <cmath>
 #include <iomanip>
+#include <functional>
+#include <string>
+
 using namespace std;
 using std::setw;
 
 // Function Prototypes
 string getRand(void);
 string hashFunc(string);
-
+void visualize(int, Node[]);
 
 int main()
 {
-	Node tree[6];
+	Node* tree = new Node[2];
+	//Node* Array = new Node tree[2];
 
 	//tree[0].setParentID("Hi");
 	//cout << getRand();
-	tree[0].setParentID(getRand());
+	tree[1].setParentID(getRand());
+	//cout << "Worked";
 	//cout << tree[0].returnParentID();
 	string input;
 	bool exit = false;
 	int level = 1;
-	int index = 0;
-	int sizeArray = 1;
+	int index = 1;
+	int sizeArray = 2;
 
 	// Tell the user how to use the program
-	cout << "---------------------------------" << endl
-		<< "Tracking Tree" << endl
+	cout << "-----------------------------------------------------------" << endl
+		<< "                     TRACKING    TREE" << endl
+		<< "-----------------------------------------------------------" << endl
 		<< "Commands are:" << endl
 		<< "'E'/'Exit' To Exit the Program"
 		<< "\n'V'/'Visualize' to see all of the ID values of the nodes"
@@ -42,62 +48,89 @@ int main()
 		<< "\n'U'/'Update' to search for, and update contents of a node"
 		<< "\nIf anything else is entered, it will be taken as a "
 		<< "\nnew raw event and create a new node in the tree." << endl;
-	cout << "-------------------------------- - " << endl << endl;
+	cout << "-----------------------------------------------------------" << endl << endl;
 
 	while (exit == false)		//		runs until the user exits
 	{
 		cin >> input; //take in input from user
-		if (input== "E" || input == "Exit")
+		if (input == "E" || input == "Exit")
 		{
 			exit = true; // exits the program
 		}
-		if (input == "V" || input == "Visualize") // Print id values of nodes
+
+		else if (input == "V" || input == "Visualize") // Print id values of nodes
 		{
-			cout << "Printing Contents of the Tree:" << endl
-				<< "-------------------------------" << endl 
-				<< "Node	RawE	ID" << endl;
-			for (int i = 0; i < sizeArray && i <= index; i++)
-			{
-					cout << i << setw(4) << tree[i].returnRawE()
-						<< setw(4) << tree[i].returnID()	<< endl;
-			}
+			visualize(index, tree);
 		}
-		if (input == "S" || input == "Search")
+
+		else if (input == "S" || input == "Search")
 		{
 			cout << "Type in and ID value to search for:" << endl;
-				string sID;
-				cin >> sID;
-				for (int i = 0; i < sizeArray && i <= index; i++)
+			string sID;
+			cin >> sID;
+			for (int i = 0; i < sizeArray && i <= index; i++)
+			{
+				if (tree[i].returnID() == sID)
 				{
-					if (tree[i].returnID() == sID)
-					{
-						cout << sID << " found. Printing Record:" << endl;
-						tree[i].printRecord();
-						i = sizeArray + 1; // exits loop;
-						sID = "Found"; // now uses sID for different purpose: telling if the variable was found or not
-					}
+					cout << sID << " found. Printing Record:" << endl;
+					tree[i].printRecord();
+					i = sizeArray + 1; // exits loop;
+					sID = "Found"; // now uses sID for different purpose: telling if the variable was found or not
+				}
 
-				}
-				if (sID != "Found")
-				{
-					cout << "The ID you searched for was not found.\n"
-						<< "Returning to main command line." << endl;
-				}
+			}
+			if (sID != "Found")
+			{
+				cout << "The ID you searched for was not found.\n"
+					<< "Returning to main command line." << endl;
+
+			}
+
+
 		}
-		if (input == "U" || input == "Update")
+		else if (input == "U" || input == "Update")
 		{
 			// still needs done
+			cout << "Update Node: \nWhat Node do you want to update? (give ID value)" << endl;
+			string iDVal;
+			cin >> iDVal;
+
 		}
 		else
 		{
-			/*
+			
 			//Needs finished. If the level is full, make
 			//a new array with +1 level, copy contents
 			//from original array, then set the old array
 			// to the new array?
+			
+
+			
 			if (index + 1 == sizeArray)
 			{
 				
+
+				int storedsize = sizeArray;
+				sizeArray = pow(2, level + 1);
+				Node* temp = new Node[sizeArray];
+				memcpy(temp, tree, sizeof(tree));
+				delete[]tree;
+				tree = temp;
+
+
+				
+				/*for (int i = 0; i <= sizeof(tree)-1; i++)
+				{
+					temp[i] = tree[i];
+				}
+				delete[] tree;
+				tree = temp;*/
+
+
+
+				level++;
+			}
+				/*
 				int temp = pow(2, level + 1) - 1;;
 				Node** new_array = new Node*[temp];
 				Node *a = tree;
@@ -107,22 +140,38 @@ int main()
 				}
 				sizeArray = pow(2, level + 1) - 1;
 				cout << new_array[0]->returnID;
-			}
-			*/
+				//below are second attempt based off of Dr.B's help
+				*/
+			 // is this still -1 even with skipping the 0th element?
+			 // is this supposd to be tree??
+
+			
+			//Node* Array = tree;
+
+			
+			
+			
+		
+		
+		
+			
 
 			//now create a new node at the next available slot
 			index++;
 			tree[index].setRawE(input); //set rawE to input
+			//tree[1].setRawE("sadday");
+			//tree[2].setRawE("hi");
 			tree[index].setParentID(tree[index / 2].returnID());	// set parent ID to it's parent using integer division (P= N/2)
-			// Now make the current nodes ID by hashing parentID + rawE
+			
+																	// Now make the current nodes ID by hashing parentID + rawE
 			tree[index].setID(hashFunc(tree[index].returnParentID() + tree[index].returnRawE()));
-
 			//------------------------------------------------------
 			// Now percolate up, update parents LHash / RHash
 			//------------------------------------------------------
 			//
 			// These are preliminary things we need to keep track of
 			// before entering the for loop.
+			
 			string relation;
 			if (index % 2 == 0)
 			{
@@ -135,7 +184,9 @@ int main()
 			int prevChildI(index);
 			//
 			//For loop to percolate up:
-			for (int i = index / 2; i >= 0; i /= 2) // finds parent(s) up to the root
+			
+
+			for (int i = index / 2; i >= 1; i /= 2) // finds parent(s) up to the root
 			{
 				if (relation == "left") // if the child is the left then update LHash
 				{
@@ -145,6 +196,7 @@ int main()
 						+ tree[prevChildI].returnRawE()		// child rawE
 						+ tree[prevChildI].returnLHash()	// child lHash
 						+ tree[prevChildI].returnLHash())); // child rHash
+					
 				}
 				if (relation == "right") // if the child is the right then update RHash
 				{
@@ -168,7 +220,10 @@ int main()
 					relation = "right";
 				}
 				prevChildI = i; //save current node index for the next time around loop
+
+				
 			}
+
 		}
 	}
 
@@ -197,7 +252,52 @@ string getRand(void)
 
 string hashFunc(string input)
 {
+	//cout << input;
 	// figure out how to write a hash function
 	//return input % "hash";
-	return "hash";
+	size_t h1 = hash<string>{}(input);
+	return to_string(h1);
+}
+
+void visualize(int index, Node theArray[])
+{
+	cout << "\nPrinting Contents of the Tree:" << endl
+		<< "---------------------------------" << endl
+		<< "Node" << setw(12) << "RawE" << setw(12) << "ID" << endl;
+	cout << "---------------------------------" << endl;
+	for (int i = 1; i <= index; i++)
+	{
+		cout << setw(2) << i << setw(14) << theArray[i].returnRawE()
+			<< setw(16) << theArray[i].returnID() << endl;
+		/*if (theArray[i].returnRawE().empty())
+		{
+			cout << "empty";
+		}*/
+	}
+	//cout << theArray[3].returnRawE();
+}
+
+void search(int index, Node theArray[])
+{
+	cout << "Type in and ID value to search for:" << endl;
+	string sID;
+	cin >> sID;
+	for (int i = 0; i <= index; i++)
+	{
+		if (theArray[i].returnID() == sID)
+		{
+			cout << sID << " found. Printing Record:" << endl;
+			theArray[i].printRecord();
+			i = index + 1; // exits loop;
+			sID = "Found"; // now uses sID for different purpose: telling if the variable was found or not
+		}
+
+	}
+	if (sID != "Found")
+	{
+		cout << "The ID you searched for was not found.\n"
+			<< "Returning to main command line." << endl;
+
+	}
+
 }

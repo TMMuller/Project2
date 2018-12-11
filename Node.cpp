@@ -54,22 +54,26 @@ void Node::printRecord(void)
 
 void Node::newLHash(string input)
 {
+	input.resize(8);
 	lHash = input;
 	lHist.push_back(input);
 }
 
 void Node::newRHash(string input)
 {
+	input.resize(8);
 	rHash = input;
 	rHist.push_back(input);
 }
 
 void Node::setParentID(string input)
 {
+	input.resize(8);
 	parentID = input;
 }
 void Node::setID(string input)
 {
+	input.resize(8);
 	iD = input;
 }
 void Node::setRawE(string input)
