@@ -113,18 +113,24 @@ int main()
 				int storedsize = sizeArray;
 				sizeArray = pow(2, level + 1);
 				Node* temp = new Node[sizeArray];
+				
+				
+				//Hopefully that allows the data to be copied
+				for (int i = 0; i < sizeof(tree); i++)
+				{
+					temp[i].setRawE(tree[i].returnRawE())
+				}
+				delete[] tree;
+				tree = temp;
+				/*
 				memcpy(temp, tree, sizeof(tree));
 				delete[]tree;
 				tree = temp;
+				*/
 
 
 				
-				/*for (int i = 0; i <= sizeof(tree)-1; i++)
-				{
-					temp[i] = tree[i];
-				}
-				delete[] tree;
-				tree = temp;*/
+				
 
 
 
